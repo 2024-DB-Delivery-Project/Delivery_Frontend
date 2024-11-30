@@ -2,12 +2,17 @@ import { Button, TextField } from "@mui/material";
 import deliverLogo from "../assets/deliverLogo.png";
 import deliverTitle from "../assets/deliverTitle.png";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = (event) => {
+    if (id === "customer" || password === "customer") {
+      navigate("/customerHome");
+    }
     event.preventDefault();
     console.log(id);
     console.log(password);
@@ -29,15 +34,16 @@ const Login = () => {
 
           <div class="flex flex-col w-80 mb-8 gap-4">
             <TextField
-              id="standard-basic"
+              id="id"
               label="ID를 입력해주세요"
               variant="standard"
               onChange={(e) => setId(e.target.value)}
             />
             <TextField
-              id="standard-basic"
+              id="password"
               label="비밀번호를 입력해주세요"
               variant="standard"
+              type="password"
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
