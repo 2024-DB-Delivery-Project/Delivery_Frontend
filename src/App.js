@@ -1,12 +1,17 @@
-import { Button } from "@mui/material";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Login from "./page/login";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1 className="text-3xl font-bold underline">Hello world!</h1>
-        <Button variant="contained">Click me!</Button>
-      </header>
+      <BrowserRouter>
+        <header className="App-header">
+          <Routes>
+            <Route path="/login" element={<Login />}></Route>
+            <Route path="/" element={<Login />}></Route>
+          </Routes>
+        </header>
+      </BrowserRouter>
     </div>
   );
 }
