@@ -11,7 +11,7 @@ const Login = () => {
 
   const handleLogin = (event) => {
     if (id === "customer" || password === "customer") {
-      navigate("/customerHome");
+      navigate("/customer");
     }
     event.preventDefault();
     console.log(id);

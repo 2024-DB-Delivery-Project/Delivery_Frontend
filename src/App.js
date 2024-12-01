@@ -1,7 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./page/Login";
 import SignUp from "./page/SignUp";
-import CustomerHome from "./page/customer/CustomerHome";
+import CustomerHome from "./page/customer/CustomerPage/CustomerHome";
+import CustomerHandler from "./page/customer/CustomerHandler";
 
 function App() {
   return (
@@ -9,10 +10,11 @@ function App() {
       <BrowserRouter>
         <header className="App-header">
           <Routes>
-            <Route path="/" element={<Login />}></Route>
-            <Route path="/login" element={<Login />}></Route>
-            <Route path="/signup" element={<SignUp />}></Route>
-            <Route path="/customerHome" element={<CustomerHome />}></Route>
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/customer" element={<CustomerHandler />} />
+            <Route path="/customer/home" element={<CustomerHome />} />
           </Routes>
         </header>
       </BrowserRouter>
