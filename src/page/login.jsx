@@ -13,6 +13,9 @@ const Login = () => {
     if (id === "customer" || password === "customer") {
       navigate("/customer");
     }
+    if (id === "seller" || password === "seller") {
+      navigate("/seller");
+    }
     event.preventDefault();
     console.log(id);
     console.log(password);
