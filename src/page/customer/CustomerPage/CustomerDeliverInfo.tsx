@@ -1,6 +1,3 @@
-import { TextField } from "@mui/material";
-import { RedButton } from "../../../components/Button/Button";
-import { useState } from "react";
 import OrderStepper from "../../../components/Stepper/OrderStepper";
 import step1 from "../../../assets/step/step1.png";
 import step2 from "../../../assets/step/step2.png";

@@ -6,66 +6,46 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { Cols, PurchaseButton, Rows } from "./types";
-import { Button } from "@mui/material";
+import { HandleChange, InfoTableTS, LogisticSelector } from "./types";
+import { MenuItem, Select } from "@mui/material";
 
-const columns: Cols[] = [
-  { id: "img", label: "이미지", minWidth: 120 },
-  { id: "name", label: "상품명", minWidth: 120 },
-  { id: "price", label: "가격", minWidth: 170 },
-  { id: "button", label: "구매하기", minWidth: 170 },
-];
+const InfoTable = ({ rows, cols }: InfoTableTS) => {
+  const [age, setAge] = React.useState<number[]>([]);
 
-const purchaseButton = ({ ispurchased }: PurchaseButton) => {
-  return (
-    <Button
-      style={{
-        backgroundColor: ispurchased ? "#CFCFCF" : "#FF7474",
-        color: "#FFF",
-        fontWeight: 800,
-      }}
-      onClick={ispurchased ? undefined : () => alert("상품을 구매하였습니다.")}
-    >
-      상품 구매하기
-    </Button>
-  );
-};
+  const handleChange = ({ event, index }: HandleChange) => {
+    setAge((prev) => {
+      const updatedAges = [...prev];
+      updatedAges[index] = event.target.value as number;
+      return updatedAges;
+    });
+  };
 
-const rows: Rows[] = [
-  {
-    img: "🍔",
-    name: "상품A",
-    price: 3000,
-    button: purchaseButton({ ispurchased: false }),
-  },
-  {
-    img: "⚽",
-    name: "상품B",
-    price: 10000,
-    button: purchaseButton({ ispurchased: false }),
-  },
-  {
-    img: "🧢",
-    name: "상품C",
-    price: 15000,
-    button: purchaseButton({ ispurchased: false }),
-  },
-  {
-    img: "💼",
-    name: "상품D",
-    price: 40000,
-    button: purchaseButton({ ispurchased: true }),
-  },
-];
+  const logisticSelector = ({ id, index }: LogisticSelector) => {
+    console.log("id", id);
+    return (
+      <div className="w-full">
+        <Select
+          labelId="demo-simple-select-label"
+          id={`select-${id}`}
+          value={age[index]}
+          label="Age"
+          onChange={(event) => handleChange({ event, index })}
+          className="w-full"
+        >
+          <MenuItem value={1}>logistics_A</MenuItem>
+          <MenuItem value={2}>logistics_B</MenuItem>
+        </Select>
+      </div>
+    );
+  };
 
-const InfoTable = () => {
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
+              {cols.map((column) => (
                 <TableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
@@ -77,21 +57,30 @@ const InfoTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => {
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  tabIndex={-1}
-                  style={{ height: "10px" }}
-                >
-                  <TableCell align={"center"}>{row["img"]}</TableCell>
-                  <TableCell align={"center"}>{row["name"]}</TableCell>
-                  <TableCell align={"center"}>{row["price"]}</TableCell>
-                  <TableCell align={"center"}>{row["button"]}</TableCell>
-                </TableRow>
-              );
-            })}
+            {rows.map((row, rowIndex) => (
+              <TableRow
+                hover
+                role="checkbox"
+                tabIndex={-1}
+                style={{ height: "10px" }}
+                key={`row-${rowIndex}`}
+              >
+                {cols.map((col, colIndex) => (
+                  <TableCell
+                    align="center"
+                    key={`cell-${rowIndex}-${colIndex}`}
+                  >
+                    {col.id === "logistic"
+                      ? logisticSelector({
+                          id: rowIndex.toString(),
+                          index: rowIndex,
+                        })
+                      : (row as Record<string, any>)[col.id]}
+                  </TableCell>
+                  //() => logisticSelector({id : colIndex.toString()})
+                ))}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

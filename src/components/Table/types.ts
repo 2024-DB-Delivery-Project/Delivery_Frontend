@@ -1,18 +1,23 @@
-interface Rows {
-  img: string;
-  name: string;
-  price: number;
-  button: React.ReactNode;
+import { SelectChangeEvent } from "@mui/material";
+import {
+  CustomerCol,
+  CustomerRow,
+} from "../../page/customer/CustomerPage/types";
+import { SellerCol, SellerRow } from "../../page/seller/SellerPage/types";
+
+interface InfoTableTS {
+  rows: CustomerRow[] | SellerRow[];
+  cols: CustomerCol[] | SellerCol[];
 }
 
-interface Cols {
+interface HandleChange {
+  event: SelectChangeEvent<number>;
+  index: number;
+}
+
+interface LogisticSelector {
   id: string;
-  label: string;
-  minWidth: number;
+  index: number;
 }
 
-interface PurchaseButton {
-  ispurchased: boolean;
-}
-
-export { Rows, Cols, PurchaseButton };
+export { InfoTableTS, HandleChange, LogisticSelector };
