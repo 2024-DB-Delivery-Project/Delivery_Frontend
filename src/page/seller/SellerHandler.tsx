@@ -3,9 +3,10 @@ import SideBar from "../../components/SideBar/SideBar";
 import deliverTitle from "../../assets/deliverTitle.png";
 import SellerHome from "./SellerPage/SellerHome";
 import SellerOrder from "./SellerPage/SellerOrder";
+import { SellerHandlerTS } from "./types";
 
-const SellerHandler = () => {
-  const [selected, setSelected] = useState(0);
+const SellerHandler = ({ selectedPage }: SellerHandlerTS) => {
+  const [selected, setSelected] = useState(selectedPage);
 
   useEffect(() => {
     console.log("selected : ", selected);

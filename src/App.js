@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./page/Login";
 import SignUp from "./page/SignUp";
-import CustomerHome from "./page/customer/CustomerPage/CustomerHome";
 import CustomerHandler from "./page/customer/CustomerHandler";
 import SellerHandler from "./page/seller/SellerHandler";
 
@@ -15,7 +14,10 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/customer" element={<CustomerHandler />} />
-            <Route path="/seller" element={<SellerHandler />} />
+            <Route
+              path="/seller"
+              element={<SellerHandler selectedPage={2} />}
+            />
           </Routes>
         </header>
       </BrowserRouter>
