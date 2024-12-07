@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BoughtListResponse, DeliveryStatusResponse, Order } from "./types";
+import { BoughtListResponse, Order } from "./types";
 
 const API_URL = process.env.REACT_APP_API_URL;
 

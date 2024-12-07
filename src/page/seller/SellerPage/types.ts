@@ -1,12 +1,11 @@
 interface SellerRow {
-  img: string;
+  order_id: number;
   name: string;
   price: number;
-  customerName: string;
-  customerPhone: string;
-  customerAddress: string;
-  logistic: string | null;
-  trackingNumber: string;
+  description: string;
+  customer_id: number;
+  address_id: number;
+  logistic_id: number;
 }
 
 interface SellerCol {

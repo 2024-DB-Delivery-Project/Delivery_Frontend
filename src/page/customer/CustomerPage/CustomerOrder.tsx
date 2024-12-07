@@ -1,9 +1,8 @@
 import { TextField, Modal, Box, Typography, Button } from "@mui/material";
 import { RedButton } from "../../../components/Button/Button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { getBoughtList } from "../../../api/customerApi";
 import { getDeliveryStatus } from "../../../api/customerApi"; // 배송 상태 가져오는 API 함수
-import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../../state/auth";
 import CustomerDeliveryInfo from "./CustomerDeliverInfo";

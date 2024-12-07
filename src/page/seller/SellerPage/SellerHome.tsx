@@ -1,56 +1,52 @@
+import { useEffect, useState } from "react";
 import { RedButton } from "../../../components/Button/Button";
 import InfoTable from "../../../components/Table/Table";
 import { SellerCol, SellerRow } from "./types";
+import { useRecoilValue } from "recoil";
+import { authState } from "../../../state/auth";
+import { getSellerOrders } from "../../../api/sellerApi";
 
 const SellerHome = () => {
+  const [rows, setRows] = useState<SellerRow[]>([]);
+  const { accessToken } = useRecoilValue(authState);
+
   const cols: SellerCol[] = [
-    { id: "img", label: "이미지", minWidth: 100 },
     { id: "name", label: "상품명", minWidth: 100 },
     { id: "price", label: "가격", minWidth: 100 },
-    { id: "customerName", label: "구매자 이름", minWidth: 100 },
-    { id: "customerPhone", label: "구매자 전화번호", minWidth: 120 },
-    { id: "customerAddress", label: "구매자 주소", minWidth: 120 },
-    { id: "logistic", label: "운송회사", minWidth: 100 },
-    { id: "trackingNumber", label: "운송장번호", minWidth: 100 },
+    { id: "description", label: "상품 설명", minWidth: 150 },
+    { id: "customer_id", label: "고객 ID", minWidth: 100 },
+    { id: "address_id", label: "주소 ID", minWidth: 100 },
+    { id: "logistic_id", label: "운송회사 ID", minWidth: 100 },
   ];
 
   const mockClickFunction = () => {
     console.log("Clicked");
   };
 
-  const rows: SellerRow[] = [
-    {
-      img: "🍔",
-      name: "상품A",
-      price: 3000,
-      customerName: "customerA",
-      customerPhone: "010-1234-5678",
-      customerAddress: "서울시 강남구",
-      logistic: null,
-      trackingNumber: "-",
-    },
-    {
-      img: "🍔",
-      name: "상품A",
-      price: 3000,
-      customerName: "customerB",
-      customerPhone: "010-1234-5678",
-      customerAddress: "부산시 금정구",
-      logistic: null,
-      trackingNumber: "-",
-    },
-    {
-      img: "💼",
-      name: "상품D",
-      price: 3000,
-      customerName: "customerB",
-      customerPhone: "010-1234-5678",
-      customerAddress: "부산시 금정구",
-      logistic: null,
-      trackingNumber: "2134",
-    },
-  ];
-
+  useEffect(() => {
+    if (accessToken) {
+      const fetchPurchasedProducts = async () => {
+        try {
+          const response = await getSellerOrders(accessToken); // 상품 목록 가져오기 API 호출
+          const newRows = response.map((order: any) => {
+            return {
+              order_id: order.order_id,
+              name: order.product.name,
+              price: order.product.price,
+              description: order.product.description,
+              customer_id: order.customer_id,
+              address_id: order.address_id,
+              logistic_id: order.logistic_id,
+            };
+          });
+          setRows(newRows);
+        } catch (error) {
+          console.error("구매한 상품을 가져오는 데 실패했습니다.", error);
+        }
+      };
+      fetchPurchasedProducts();
+    }
+  }, [accessToken]);
   return (
     <div className="flex flex-col w-full px-16 py-8 gap-4">
       <div className="flex flex-col gap-2 mb-4">
