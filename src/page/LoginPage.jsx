@@ -41,7 +41,7 @@ const LoginPage = () => {
       } else if (userRole === "LOGISTIC") {
         navigate("/logistics");
       } else if (userRole === "DRIVER") {
-        navigate("/logistics");
+        navigate("/driver");
       } else {
         throw new Error("알 수 없는 사용자 역할입니다.");
       }

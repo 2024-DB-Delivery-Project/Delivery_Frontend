@@ -1,58 +1,38 @@
 import { Button } from "@mui/material";
 import InfoTable from "../../../components/Table/Table";
-import { CustomerCol, CustomerRow, PurchaseButton } from "./types";
+import { CustomerCol, CustomerRow, CustomerTS, Product } from "./types";
+import { useEffect, useState } from "react";
+import { PurchaseButton } from "../../../components/Button/PurchaseButton";
+import { useRecoilValue } from "recoil";
+import { authState } from "../../../state/auth";
 
-const CustomerHome = () => {
-  const purchaseButton = ({ ispurchased }: PurchaseButton) => {
-    return (
-      <Button
-        style={{
-          backgroundColor: ispurchased ? "#CFCFCF" : "#FF7474",
-          color: "#FFF",
-          fontWeight: 800,
-        }}
-        onClick={
-          ispurchased ? undefined : () => alert("상품을 구매하였습니다.")
-        }
-      >
-        상품 구매하기
-      </Button>
-    );
-  };
+const CustomerHome = ({ productList }: CustomerTS) => {
+  const { accessToken, userId } = useRecoilValue(authState); // Recoil에서 accessToken과 userId 가져오기
+  const [rows, setRows] = useState<CustomerRow[]>([]); // rows 상태 관리
+  const [purchasedProducts, setPurchasedProducts] = useState<number[]>([]);
 
   const cols: CustomerCol[] = [
-    { id: "img", label: "이미지", minWidth: 120 },
     { id: "name", label: "상품명", minWidth: 120 },
-    { id: "price", label: "가격", minWidth: 170 },
+    { id: "price", label: "가격", minWidth: 120 },
+    { id: "description", label: "상품 설명", minWidth: 170 },
     { id: "button", label: "구매하기", minWidth: 170 },
   ];
 
-  const rows: CustomerRow[] = [
-    {
-      img: "🍔",
-      name: "상품A",
-      price: 3000,
-      button: purchaseButton({ ispurchased: false }),
-    },
-    {
-      img: "⚽",
-      name: "상품B",
-      price: 10000,
-      button: purchaseButton({ ispurchased: false }),
-    },
-    {
-      img: "🧢",
-      name: "상품C",
-      price: 15000,
-      button: purchaseButton({ ispurchased: false }),
-    },
-    {
-      img: "💼",
-      name: "상품D",
-      price: 40000,
-      button: purchaseButton({ ispurchased: true }),
-    },
-  ];
+  useEffect(() => {
+    if (Array.isArray(productList)) {
+      const newRows = productList.map((product: Product) => ({
+        product_id: product.product_id,
+        name: product.name,
+        price: product.price,
+        description: product.description,
+        button: (
+          <PurchaseButton ispurchased={false} product_id={product.product_id} />
+        ),
+      }));
+      setRows(newRows);
+    }
+    console.log("productList", productList);
+  }, [productList, purchasedProducts]);
 
   return (
     <div className="flex flex-col w-full px-16 py-8 gap-4">

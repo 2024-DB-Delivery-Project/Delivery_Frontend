@@ -1,7 +1,4 @@
-interface CustomerRow {
-  img: string;
-  name: string;
-  price: number;
+interface CustomerRow extends Product {
   button: React.ReactNode;
 }
 
@@ -15,4 +12,15 @@ interface PurchaseButton {
   ispurchased: boolean;
 }
 
-export { CustomerRow, CustomerCol, PurchaseButton };
+interface Product {
+  product_id: number;
+  name: string;
+  price: number;
+  description: string;
+}
+
+interface CustomerTS {
+  productList: Product[];
+}
+
+export { CustomerRow, CustomerCol, PurchaseButton, CustomerTS, Product };

@@ -12,8 +12,9 @@ interface LogisticsCol {
   minWidth: number;
 }
 
-interface PurchaseButton {
+interface PurchaseButtonTS {
   ispurchased: boolean;
+  product_id: number;
 }
 
-export { LogisticsRow, LogisticsCol, PurchaseButton };
+export { LogisticsRow, LogisticsCol, PurchaseButtonTS };
