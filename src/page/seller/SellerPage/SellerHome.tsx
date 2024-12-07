@@ -18,6 +18,7 @@ const SellerHome = () => {
     { id: "customer_id", label: "고객 ID", minWidth: 100 },
     { id: "address_id", label: "주소 ID", minWidth: 100 },
     { id: "logistic_id", label: "운송회사 ID", minWidth: 100 },
+    { id: "tracking_number", label: "운송장번호", minWidth: 100 },
   ];
 
   const mockClickFunction = async () => {
@@ -46,6 +47,7 @@ const SellerHome = () => {
               customer_id: order.customer_id,
               address_id: order.address_id,
               logistic_id: order.logistic_id,
+              tracking_number: order.tracking_number,
             };
           });
           setRows(newRows);

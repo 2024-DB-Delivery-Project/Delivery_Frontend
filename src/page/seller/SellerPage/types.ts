@@ -6,6 +6,7 @@ interface SellerRow {
   customer_id: number;
   address_id: number;
   logistic_id: number;
+  tracking_number: number | null;
 }
 
 interface SellerCol {
