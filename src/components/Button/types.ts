@@ -1,6 +1,6 @@
 interface RedButtonProps {
   buttonText: string;
-  onClick?: () => void;
+  onClick: () => void;
 }
 
 export { RedButtonProps };

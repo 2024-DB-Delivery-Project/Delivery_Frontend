@@ -14,6 +14,10 @@ const SellerHome = () => {
     { id: "trackingNumber", label: "운송장번호", minWidth: 100 },
   ];
 
+  const mockClickFunction = () => {
+    console.log("Clicked");
+  };
+
   const rows: SellerRow[] = [
     {
       img: "🍔",
@@ -57,7 +61,10 @@ const SellerHome = () => {
         </div>
       </div>
       <InfoTable cols={cols} rows={rows} />
-      <RedButton buttonText="물류 회사로 정보 전송 >>" />
+      <RedButton
+        buttonText="물류 회사로 정보 전송 >>"
+        onClick={mockClickFunction}
+      />
     </div>
   );
 };

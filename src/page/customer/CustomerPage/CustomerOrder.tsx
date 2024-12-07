@@ -1,10 +1,20 @@
 import { TextField } from "@mui/material";
 import { RedButton } from "../../../components/Button/Button";
 import { useState } from "react";
+import { addToBoughtList } from "../../../api/customerApi";
 
 const CustomerOrder = () => {
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
+
+  const handleAddToBoughtList = async () => {
+    try {
+      const result = await addToBoughtList(name, phone);
+      alert(`구매 내역은 아래 내용을 참고해주세요: ${JSON.stringify(result)}`);
+    } catch (error) {
+      alert("구매 내역 추가에 실패했습니다.");
+    }
+  };
 
   return (
     <div className="flex flex-col w-full px-16 py-8 gap-4">
@@ -22,7 +32,7 @@ const CustomerOrder = () => {
             id="name"
             label="이름을 입력해주세요"
             variant="standard"
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => setPhone(e.target.value + "  ")}
             style={{ width: "80%" }}
           />
         </div>
@@ -37,7 +47,10 @@ const CustomerOrder = () => {
           />
         </div>
       </div>
-      <RedButton buttonText="주문한 물품 조회" />
+      <RedButton
+        buttonText="주문한 물품 조회"
+        onClick={handleAddToBoughtList}
+      />
     </div>
   );
 };

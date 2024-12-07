@@ -7,8 +7,8 @@ import { authState } from "../../../state/auth";
 import { getPurchasedProducts } from "../../../api/customerApi";
 
 const CustomerHome = ({ productList }: CustomerTS) => {
-  const { accessToken } = useRecoilValue(authState); // Recoil에서 accessToken과 userId 가져오기
-  const [rows, setRows] = useState<CustomerRow[]>([]); // rows 상태 관리
+  const { accessToken } = useRecoilValue(authState);
+  const [rows, setRows] = useState<CustomerRow[]>([]);
   const [purchasedProducts, setPurchasedProducts] = useState<number[]>([]);
 
   const cols: CustomerCol[] = [
@@ -19,7 +19,6 @@ const CustomerHome = ({ productList }: CustomerTS) => {
   ];
 
   const handlePurchaseSuccess = (productId: number) => {
-    // 구매한 상품 ID를 purchasedProducts에 추가
     setPurchasedProducts((prevProducts) => [...prevProducts, productId]);
   };
 
@@ -36,7 +35,7 @@ const CustomerHome = ({ productList }: CustomerTS) => {
             <PurchaseButton
               ispurchased={isPurchased}
               product_id={product.product_id}
-              onPurchaseSuccess={handlePurchaseSuccess} // 성공 시 콜백 전달
+              onPurchaseSuccess={handlePurchaseSuccess}
             />
           ),
         };

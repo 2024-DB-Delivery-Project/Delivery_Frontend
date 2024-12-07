@@ -9,7 +9,7 @@ export const PurchaseButton = ({
   product_id,
   onPurchaseSuccess,
 }: PurchaseButtonTS) => {
-  const { accessToken } = useRecoilValue(authState); // Recoil에서 accessToken을 가져옵니다.
+  const { accessToken } = useRecoilValue(authState);
   const handlePurchase = async () => {
     if (!accessToken) {
       alert("로그인이 필요합니다.");
@@ -32,7 +32,7 @@ export const PurchaseButton = ({
         color: "#FFF",
         fontWeight: 800,
       }}
-      onClick={ispurchased ? undefined : handlePurchase} // 구매 버튼 클릭 시 handlePurchase 실행
+      onClick={ispurchased ? undefined : handlePurchase}
     >
       상품 구매하기
     </Button>

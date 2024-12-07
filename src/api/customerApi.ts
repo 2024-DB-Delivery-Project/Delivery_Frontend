@@ -47,4 +47,17 @@ const getPurchasedProducts = async (accessToken: string) => {
   }
 };
 
-export { getProductList, buyProduct, getPurchasedProducts };
+const addToBoughtList = async (name: string, phoneNumber: string) => {
+  try {
+    const response = await axios.post(`${API_URL}/customers/bought_list`, {
+      name,
+      phone_number: phoneNumber,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("구매 내역 추가에 실패했습니다.", error);
+    throw error;
+  }
+};
+
+export { getProductList, buyProduct, getPurchasedProducts, addToBoughtList };
