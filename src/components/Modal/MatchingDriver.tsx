@@ -9,7 +9,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-// import CloseIcon from "@mui/icons-material/Close";
+import CloseIcon from "@mui/icons-material/Close";
 import Selector from "../Selector/Selector";
 import MatchingDriverTS from "./types";
 
@@ -81,7 +81,7 @@ export default function MatchingDriver({
               onClick={handleClose}
               aria-label="close"
             >
-              {/* <CloseIcon /> */}
+              <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               배송기사 지정
