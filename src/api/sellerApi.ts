@@ -16,4 +16,18 @@ const getSellerOrders = async (accessToken: string) => {
   }
 };
 
-export { getSellerOrders };
+const selectLogistic = async (orderId: number) => {
+  console.log("orderId", orderId);
+  try {
+    const response = await axios.post(`${API_URL}/seller/select_logistic`, {
+      order_id: orderId,
+    });
+    console.log("Logistic selected:", response);
+    return response;
+  } catch (error) {
+    console.error("Error updating logistic", error);
+    throw new Error("Failed to update logistic");
+  }
+};
+
+export { getSellerOrders, selectLogistic };

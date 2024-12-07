@@ -4,11 +4,12 @@ import InfoTable from "../../../components/Table/Table";
 import { SellerCol, SellerRow } from "./types";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../../state/auth";
-import { getSellerOrders } from "../../../api/sellerApi";
+import { getSellerOrders, selectLogistic } from "../../../api/sellerApi";
 
 const SellerHome = () => {
   const [rows, setRows] = useState<SellerRow[]>([]);
   const { accessToken } = useRecoilValue(authState);
+  const [complete, setComplete] = useState<boolean>(false);
 
   const cols: SellerCol[] = [
     { id: "name", label: "상품명", minWidth: 100 },
@@ -19,8 +20,16 @@ const SellerHome = () => {
     { id: "logistic_id", label: "운송회사 ID", minWidth: 100 },
   ];
 
-  const mockClickFunction = () => {
-    console.log("Clicked");
+  const mockClickFunction = async () => {
+    try {
+      for (const row of rows) {
+        await selectLogistic(row.order_id);
+      }
+      console.log("모든 주문의 물류 정보가 성공적으로 업데이트되었습니다.");
+      setComplete(true);
+    } catch (error) {
+      console.error("일괄 업데이트 중 오류가 발생했습니다.", error);
+    }
   };
 
   useEffect(() => {
@@ -46,7 +55,8 @@ const SellerHome = () => {
       };
       fetchPurchasedProducts();
     }
-  }, [accessToken]);
+  }, [accessToken, complete]);
+
   return (
     <div className="flex flex-col w-full px-16 py-8 gap-4">
       <div className="flex flex-col gap-2 mb-4">
@@ -64,4 +74,5 @@ const SellerHome = () => {
     </div>
   );
 };
+
 export default SellerHome;
