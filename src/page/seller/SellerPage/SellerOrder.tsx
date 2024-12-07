@@ -19,11 +19,6 @@ const SellerOrder = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("trackingNumber : ", trackingNumber);
-    console.log("deliveryInfo : ", deliveryInfo);
-  }, [trackingNumber, deliveryInfo]);
-
   const stepInfo = [
     { step: 1, img: { step1 }, title: "step 1 : 주문이 접수되었습니다." },
     {

@@ -6,39 +6,11 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { HandleChange, InfoTableTS, LogisticSelector } from "./types";
-import { MenuItem, Select } from "@mui/material";
+import { InfoTableTS } from "./types";
+import Selector from "../Selector/Selector";
 
 const InfoTable = ({ rows, cols }: InfoTableTS) => {
-  const [age, setAge] = React.useState<number[]>([]);
-
-  const handleChange = ({ event, index }: HandleChange) => {
-    setAge((prev) => {
-      const updatedAges = [...prev];
-      updatedAges[index] = event.target.value as number;
-      return updatedAges;
-    });
-  };
-
-  const logisticSelector = ({ id, index }: LogisticSelector) => {
-    console.log("id", id);
-    return (
-      <div className="w-full">
-        <Select
-          labelId="demo-simple-select-label"
-          id={`select-${id}`}
-          value={age[index]}
-          label="Age"
-          onChange={(event) => handleChange({ event, index })}
-          className="w-full"
-        >
-          <MenuItem value={1}>logistics_A</MenuItem>
-          <MenuItem value={2}>logistics_B</MenuItem>
-        </Select>
-      </div>
-    );
-  };
-
+  const selectorOptios = ["logistic1", "logistic2", "logistic3"];
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer>
@@ -70,12 +42,16 @@ const InfoTable = ({ rows, cols }: InfoTableTS) => {
                     align="center"
                     key={`cell-${rowIndex}-${colIndex}`}
                   >
-                    {col.id === "logistic"
-                      ? logisticSelector({
-                          id: rowIndex.toString(),
-                          index: rowIndex,
-                        })
-                      : (row as Record<string, any>)[col.id]}
+                    {col.id === "logistic" ? (
+                      <Selector
+                        id={colIndex.toString()}
+                        index={rowIndex}
+                        options={selectorOptios}
+                        // onChange={() => {}} //TODO
+                      />
+                    ) : (
+                      (row as Record<string, any>)[col.id]
+                    )}
                   </TableCell>
                   //() => logisticSelector({id : colIndex.toString()})
                 ))}

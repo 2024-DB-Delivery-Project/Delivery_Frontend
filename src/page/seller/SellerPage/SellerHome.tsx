@@ -1,8 +1,6 @@
-import { InputLabel, MenuItem, Select } from "@mui/material";
 import { RedButton } from "../../../components/Button/Button";
 import InfoTable from "../../../components/Table/Table";
 import { SellerCol, SellerRow } from "./types";
-import { useState } from "react";
 
 const SellerHome = () => {
   const cols: SellerCol[] = [

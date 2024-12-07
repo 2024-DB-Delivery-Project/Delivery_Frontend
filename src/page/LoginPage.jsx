@@ -10,15 +10,14 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const handleLogin = (event) => {
-    if (id === "customer" || password === "customer") {
+    if (id === "customer" && password === "123") {
       navigate("/customer");
-    }
-    if (id === "seller" || password === "seller") {
+    } else if (id === "seller" && password === "123") {
       navigate("/seller");
+    } else if (id === "logistics" && password === "123") {
+      navigate("/logistics");
     }
     event.preventDefault();
-    console.log(id);
-    console.log(password);
     //TODO: 로그인 api 로직 구현 필요
   };
 

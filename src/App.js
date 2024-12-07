@@ -3,6 +3,7 @@ import SignUp from "./page/SignUp";
 import CustomerHandler from "./page/customer/CustomerHandler";
 import SellerHandler from "./page/seller/SellerHandler";
 import Login from "./page/LoginPage";
+import LogisticsHandler from "./page/logistics/LogisticsHandler";
 
 function App() {
   return (
@@ -14,10 +15,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/customer" element={<CustomerHandler />} />
-            <Route
-              path="/seller"
-              element={<SellerHandler selectedPage={2} />}
-            />
+            <Route path="/seller" element={<SellerHandler />} />
+            <Route path="/logistics" element={<LogisticsHandler />} />
           </Routes>
         </header>
       </BrowserRouter>

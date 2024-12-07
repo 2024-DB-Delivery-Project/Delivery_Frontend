@@ -1,23 +1,13 @@
-import { SelectChangeEvent } from "@mui/material";
 import {
   CustomerCol,
   CustomerRow,
 } from "../../page/customer/CustomerPage/types";
 import { SellerCol, SellerRow } from "../../page/seller/SellerPage/types";
+import { LogisticsCol, LogisticsRow } from "../../page/logistics/types";
 
 interface InfoTableTS {
-  rows: CustomerRow[] | SellerRow[];
-  cols: CustomerCol[] | SellerCol[];
+  rows: CustomerRow[] | SellerRow[] | LogisticsRow[];
+  cols: CustomerCol[] | SellerCol[] | LogisticsCol[];
 }
 
-interface HandleChange {
-  event: SelectChangeEvent<number>;
-  index: number;
-}
-
-interface LogisticSelector {
-  id: string;
-  index: number;
-}
-
-export { InfoTableTS, HandleChange, LogisticSelector };
+export { InfoTableTS };

@@ -1,14 +1,12 @@
 import deliverLogoDBG from "../../assets/deliverLogo_DBG.png";
 import { SideBarTS } from "./types";
 
-const SideBar = ({ setSelected, selected, options }: SideBarTS) => {
-  console.log("selected : ", selected);
-
+const SideBar = ({ setSelected, selected, options, username }: SideBarTS) => {
   return (
     <div className="bg-backgroundBlue w-1/5 h-screen flex flex-col items-center py-8 justify-between">
       <div className="w-full flex flex-col gap-4 items-center">
         <img src={deliverLogoDBG} alt="logo" className="w-32" />
-        <div className="font-bold text-blueLight">CUSTOMER1</div>
+        <div className="font-bold text-blueLight">{username}</div>
 
         {options.map((option, key) => (
           <div

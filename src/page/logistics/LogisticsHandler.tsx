@@ -1,18 +1,14 @@
 import { useEffect, useState } from "react";
 import SideBar from "../../components/SideBar/SideBar";
 import deliverTitle from "../../assets/deliverTitle.png";
-import SellerHome from "./SellerPage/SellerHome";
-import SellerOrder from "./SellerPage/SellerOrder";
+import LogisticHome from "./LogisticsHome";
 
-const SellerHandler = () => {
+const LogisticsHandler = () => {
   const [selected, setSelected] = useState(0);
 
-  const sellerSideOptions = [
+  const customerSideOptions = [
     {
-      name: "주문목록",
-    },
-    {
-      name: "물품조회",
+      name: "배송 가능한 물품",
     },
   ];
 
@@ -21,17 +17,16 @@ const SellerHandler = () => {
       <SideBar
         setSelected={setSelected}
         selected={selected}
-        options={sellerSideOptions}
-        username="seller1"
+        options={customerSideOptions}
+        username="logistics1"
       />
       <div className="w-4/5">
         <div className="w-full bg-white py-2 border-b-2 border-backgroundBlue ">
           <img src={deliverTitle} alt="deliverLogo" className="h-8 mx-auto" />
         </div>
-        {selected === 0 && <SellerHome />}
-        {selected === 1 && <SellerOrder />}
+        {selected === 0 && <LogisticHome />}
       </div>
     </div>
   );
 };
-export default SellerHandler;
+export default LogisticsHandler;
