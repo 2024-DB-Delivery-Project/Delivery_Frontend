@@ -23,4 +23,16 @@ interface CustomerTS {
   productList: Product[];
 }
 
-export { CustomerRow, CustomerCol, PurchaseButton, CustomerTS, Product };
+interface CustomerDeliveryInfoTS {
+  order_id: number;
+  delivery_status: "Received" | "Processing" | "Shipped" | "Delivered";
+}
+
+export {
+  CustomerRow,
+  CustomerCol,
+  PurchaseButton,
+  CustomerTS,
+  Product,
+  CustomerDeliveryInfoTS,
+};

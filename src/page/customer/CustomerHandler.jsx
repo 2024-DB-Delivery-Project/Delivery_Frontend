@@ -25,9 +25,6 @@ const CustomerHandler = () => {
     {
       name: "물품조회",
     },
-    {
-      name: "배송상태조회",
-    },
   ];
 
   return (
@@ -43,7 +40,7 @@ const CustomerHandler = () => {
         </div>
         {selected === 0 && <CustomerHome productList={productList[0]} />}
         {selected === 1 && <CustomerOrder />}
-        {selected === 2 && <CustomerDeliveryInfo />}
+        {/* {selected === 2 && <CustomerDeliveryInfo />} */}
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BoughtListResponse, Order } from "./types";
+import { BoughtListResponse, DeliveryStatusResponse, Order } from "./types";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -68,4 +68,23 @@ const getBoughtList = async (
   }
 };
 
-export { getProductList, buyProduct, getPurchasedProducts, getBoughtList };
+const getDeliveryStatus = async (accessToken: string) => {
+  try {
+    const response = await axios.get(`${API_URL}/customers/delivery_status`, {
+      headers: {
+        Authorization: `${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching delivery status:", error);
+    throw error;
+  }
+};
+export {
+  getProductList,
+  buyProduct,
+  getPurchasedProducts,
+  getBoughtList,
+  getDeliveryStatus,
+};

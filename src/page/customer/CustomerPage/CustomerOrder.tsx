@@ -1,22 +1,63 @@
-import { TextField } from "@mui/material";
+import { TextField, Modal, Box, Typography, Button } from "@mui/material";
 import { RedButton } from "../../../components/Button/Button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getBoughtList } from "../../../api/customerApi";
+import { getDeliveryStatus } from "../../../api/customerApi"; // 배송 상태 가져오는 API 함수
+import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { authState } from "../../../state/auth";
+import CustomerDeliveryInfo from "./CustomerDeliverInfo";
 
 const CustomerOrder = () => {
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
-  const [boughtList, setBoughtList] = useState<any[]>([]); // 구매한 물품 목록 상태
+  const [boughtList, setBoughtList] = useState<any[]>([]);
+  const [open, setOpen] = useState(false);
+  const [orderId, setOrderId] = useState<number | null>(null);
+  const [deliveryStatus, setDeliveryStatus] = useState<any | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const { accessToken } = useRecoilValue(authState);
 
   const handleAddToBoughtList = async () => {
     try {
-      // API 호출: name과 phoneNumber는 고정값 또는 사용자 입력값으로 설정 가능
       const orders = await getBoughtList("customer1", "010-1111-1111");
-      setBoughtList(orders); // 응답 데이터를 상태로 설정
+      setBoughtList(orders);
       console.log("구매한 물품 목록:", orders);
     } catch (error) {
       console.error("구매한 물품 조회 실패:", error);
     }
+  };
+
+  const handleOrderClick = async (orderId: number) => {
+    setOrderId(orderId); // 클릭된 주문 ID 설정
+    setOpen(true); // 모달 열기
+
+    setLoading(true);
+    if (accessToken) {
+      try {
+        const data = await getDeliveryStatus(accessToken);
+        const orderStatus = data.delivery_statuses.find(
+          (status: any) => status.order_id === orderId
+        );
+
+        if (orderStatus) {
+          setDeliveryStatus(orderStatus);
+        } else {
+          setDeliveryStatus(null);
+        }
+      } catch (error) {
+        setError("배송 상태를 가져오는 데 실패했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false); // 모달 닫기
+    setOrderId(null); // 주문 ID 초기화
+    setDeliveryStatus(null); // 배송 상태 초기화
   };
 
   return (
@@ -35,7 +76,7 @@ const CustomerOrder = () => {
             id="name"
             label="이름을 입력해주세요"
             variant="standard"
-            onChange={(e) => setPhone(e.target.value + "  ")}
+            onChange={(e) => setName(e.target.value)}
             style={{ width: "80%" }}
           />
         </div>
@@ -45,7 +86,7 @@ const CustomerOrder = () => {
             id="phone"
             label="'-'를 포함한 11자리 전화번호를 입력하세요"
             variant="standard"
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setPhone(e.target.value)}
             style={{ width: "80%" }}
           />
         </div>
@@ -63,6 +104,7 @@ const CustomerOrder = () => {
             <li
               key={item.order_id}
               className="flex justify-between items-center bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+              onClick={() => handleOrderClick(item.order_id)}
             >
               <div>
                 <span className="text-gray-900 font-medium">
@@ -76,7 +118,43 @@ const CustomerOrder = () => {
           ))}
         </ul>
       </div>
+
+      {/* MUI Modal */}
+      <Modal open={open} onClose={handleCloseModal}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 800,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <Typography variant="h6" component="h2">
+            배송 상태
+          </Typography>
+          {loading ? (
+            <Typography>로딩 중...</Typography>
+          ) : error ? (
+            <Typography>{error}</Typography>
+          ) : deliveryStatus ? (
+            <CustomerDeliveryInfo
+              delivery_status={deliveryStatus.delivery_status}
+              order_id={deliveryStatus.order_id}
+            />
+          ) : (
+            <Typography>해당 주문의 배송 상태를 찾을 수 없습니다.</Typography>
+          )}
+          <Button onClick={handleCloseModal} sx={{ mt: 2 }}>
+            닫기
+          </Button>
+        </Box>
+      </Modal>
     </div>
   );
 };
+
 export default CustomerOrder;

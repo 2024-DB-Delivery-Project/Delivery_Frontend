@@ -6,6 +6,7 @@ import LoginPage from "./page/LoginPage";
 import LogisticsHandler from "./page/logistics/LogisticsHandler";
 import { RecoilRoot, useRecoilValue } from "recoil";
 import { authState } from "./state/auth";
+import CustomerDeliveryInfo from "./page/customer/CustomerPage/CustomerDeliverInfo";
 
 const PrivateRoute = ({ children, role }) => {
   const auth = useRecoilValue(authState);
@@ -32,6 +33,14 @@ function App() {
                 element={
                   <PrivateRoute role="CUSTOMER">
                     <CustomerHandler />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/customer/:order_id"
+                element={
+                  <PrivateRoute role="CUSTOMER">
+                    <CustomerDeliveryInfo />
                   </PrivateRoute>
                 }
               />
