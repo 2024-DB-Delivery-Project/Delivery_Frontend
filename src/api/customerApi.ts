@@ -1,4 +1,5 @@
 import axios from "axios";
+import { BoughtListResponse, Order } from "./types";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -47,17 +48,24 @@ const getPurchasedProducts = async (accessToken: string) => {
   }
 };
 
-const addToBoughtList = async (name: string, phoneNumber: string) => {
+const getBoughtList = async (
+  name: string,
+  phoneNumber: string
+): Promise<Order[]> => {
   try {
-    const response = await axios.post(`${API_URL}/customers/bought_list`, {
-      name,
-      phone_number: phoneNumber,
-    });
-    return response.data;
+    const response = await axios.post<BoughtListResponse>(
+      `${API_URL}/customers/bought_list`,
+      {
+        name,
+        phone_number: phoneNumber,
+      }
+    );
+
+    return response.data.orders;
   } catch (error) {
-    console.error("구매 내역 추가에 실패했습니다.", error);
+    console.error("Error fetching bought list:", error);
     throw error;
   }
 };
 
-export { getProductList, buyProduct, getPurchasedProducts, addToBoughtList };
+export { getProductList, buyProduct, getPurchasedProducts, getBoughtList };
