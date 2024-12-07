@@ -15,6 +15,7 @@ interface LogisticsCol {
 interface PurchaseButtonTS {
   ispurchased: boolean;
   product_id: number;
+  onPurchaseSuccess: (productId: number) => void;
 }
 
 export { LogisticsRow, LogisticsCol, PurchaseButtonTS };

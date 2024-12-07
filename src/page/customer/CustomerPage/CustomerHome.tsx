@@ -1,13 +1,13 @@
-import { Button } from "@mui/material";
 import InfoTable from "../../../components/Table/Table";
 import { CustomerCol, CustomerRow, CustomerTS, Product } from "./types";
 import { useEffect, useState } from "react";
 import { PurchaseButton } from "../../../components/Button/PurchaseButton";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../../state/auth";
+import { getPurchasedProducts } from "../../../api/customerApi";
 
 const CustomerHome = ({ productList }: CustomerTS) => {
-  const { accessToken, userId } = useRecoilValue(authState); // Recoil에서 accessToken과 userId 가져오기
+  const { accessToken } = useRecoilValue(authState); // Recoil에서 accessToken과 userId 가져오기
   const [rows, setRows] = useState<CustomerRow[]>([]); // rows 상태 관리
   const [purchasedProducts, setPurchasedProducts] = useState<number[]>([]);
 
@@ -18,21 +18,49 @@ const CustomerHome = ({ productList }: CustomerTS) => {
     { id: "button", label: "구매하기", minWidth: 170 },
   ];
 
+  const handlePurchaseSuccess = (productId: number) => {
+    // 구매한 상품 ID를 purchasedProducts에 추가
+    setPurchasedProducts((prevProducts) => [...prevProducts, productId]);
+  };
+
   useEffect(() => {
     if (Array.isArray(productList)) {
-      const newRows = productList.map((product: Product) => ({
-        product_id: product.product_id,
-        name: product.name,
-        price: product.price,
-        description: product.description,
-        button: (
-          <PurchaseButton ispurchased={false} product_id={product.product_id} />
-        ),
-      }));
+      const newRows = productList.map((product: Product) => {
+        const isPurchased = purchasedProducts.includes(product.product_id);
+        return {
+          product_id: product.product_id,
+          name: product.name,
+          price: product.price,
+          description: product.description,
+          button: (
+            <PurchaseButton
+              ispurchased={isPurchased}
+              product_id={product.product_id}
+              onPurchaseSuccess={handlePurchaseSuccess} // 성공 시 콜백 전달
+            />
+          ),
+        };
+      });
       setRows(newRows);
     }
-    console.log("productList", productList);
   }, [productList, purchasedProducts]);
+
+  useEffect(() => {
+    if (accessToken) {
+      const fetchPurchasedProducts = async () => {
+        try {
+          const response = await getPurchasedProducts(accessToken);
+          const productIds = response.purchased_products.map(
+            (product: { product_id: number }) => product.product_id
+          );
+          setPurchasedProducts(productIds);
+        } catch (error) {
+          console.error("구매한 상품을 가져오는 데 실패했습니다.", error);
+        }
+      };
+      fetchPurchasedProducts();
+    }
+  }, [accessToken]);
 
   return (
     <div className="flex flex-col w-full px-16 py-8 gap-4">
