@@ -24,7 +24,7 @@ const markDelivered = async (token: string, deliveryId: number) => {
       { delivery_id: deliveryId }, // 요청 본문에 delivery_id 포함
       {
         headers: {
-          Authorization: `Bearer ${token}`, // 토큰 인증 (Bearer 방식)
+          Authorization: `${token}`, // 토큰 인증 (Bearer 방식)
         },
       }
     );

@@ -1,43 +1,61 @@
 import InfoTable from "../../components/Table/Table";
-import { RedButton } from "../../components/Button/Button";
+import { DisableButton, RedButton } from "../../components/Button/Button";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../state/auth";
 import { DriverCol, DriverRow } from "./types";
-import { getDriverDeliveries } from "../../api/driverApi";
+import { getDriverDeliveries, markDelivered } from "../../api/driverApi";
 
 const DriverHome = () => {
   const { accessToken } = useRecoilValue(authState);
   const [rows, setRows] = useState<DriverRow[]>([]);
+  const [updatePage, setUpdatePage] = useState<boolean>(false);
   const [deliverCity, setDeliverCity] = useState<string[]>([]);
 
-  const handleMarkDelivered = (deliveryId: number) => {
+  const handleMarkDelivered = async (deliveryId: number) => {
     console.log(`배송완료 상태 변경: ${deliveryId}`);
-    // 여기서 배송 완료 상태 변경 API 호출 등을 처리
+    if (accessToken) {
+      try {
+        const response = await markDelivered(accessToken, deliveryId);
+        setRows((prevRows) =>
+          prevRows.map((row) =>
+            row.deliveryId === deliveryId
+              ? { ...row, deliveryStatus: response.delivery_status } // 배송 상태를 'Delivered'로 업데이트
+              : row
+          )
+        );
+        alert("배송 완료 상태가 변경되었습니다.");
+      } catch (error) {
+        console.error("Error marking delivery as delivered", error);
+        alert("배송 완료 상태 변경에 실패했습니다.");
+      }
+    }
+    setUpdatePage((prev) => !prev);
   };
 
   const fetchData = async () => {
     if (accessToken) {
       try {
         const data = await getDriverDeliveries(accessToken);
-        const { deliveries } = data; // 응답 구조가 { deliveries: [ ... ] } 형태라고 가정
+        const { deliveries } = data;
 
-        // 배송 데이터에서 각 항목을 DriverRow 형태로 변환
-        const updatedRows: DriverRow[] = deliveries.map((delivery: any) => ({
-          deliveryId: delivery.delivery_id,
-          name: delivery.product_name,
-          customerName: delivery.customer_name,
-          customerPhone: delivery.customer_phone,
-          customerAddress: delivery.detailed_address,
-          trackingNumber: delivery.tracking_number || "-",
-          deliveryStatus: delivery.delivery_status,
-          button: (
-            <RedButton
-              buttonText="배송완료 상태 변경"
-              onClick={() => handleMarkDelivered(delivery.delivery_id)}
-            />
-          ),
-        }));
+        const updatedRows: DriverRow[] = deliveries
+          .filter((delivery: any) => delivery.delivery_status !== "Delivered") // "Delivered"인 항목을 제외
+          .map((delivery: any) => ({
+            deliveryId: delivery.delivery_id,
+            name: delivery.product_name,
+            customerName: delivery.customer_name,
+            customerPhone: delivery.customer_phone,
+            customerAddress: delivery.detailed_address,
+            trackingNumber: delivery.tracking_number || "-",
+            deliveryStatus: delivery.delivery_status,
+            button: (
+              <RedButton
+                buttonText="배송완료 상태 변경"
+                onClick={() => handleMarkDelivered(delivery.delivery_id)}
+              />
+            ),
+          }));
 
         setRows(updatedRows);
         const cities = deliveries.map(
@@ -57,7 +75,7 @@ const DriverHome = () => {
 
   useEffect(() => {
     fetchData();
-  }, [accessToken]);
+  }, [accessToken, updatePage]);
 
   const cols: DriverCol[] = [
     { id: "name", label: "상품명", minWidth: 100 },

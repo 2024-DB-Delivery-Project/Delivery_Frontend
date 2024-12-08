@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { RedButtonProps } from "./types";
+import { DisableButtonTS, RedButtonProps } from "./types";
 
 const RedButton = ({ buttonText, onClick }: RedButtonProps) => {
   return (
@@ -15,4 +15,18 @@ const RedButton = ({ buttonText, onClick }: RedButtonProps) => {
   );
 };
 
-export { RedButton };
+const DisableButton = ({ buttonText }: DisableButtonTS) => {
+  return (
+    <div>
+      <Button
+        variant="contained"
+        style={{ backgroundColor: "#CFCFCF", color: "#FFF", fontWeight: 800 }}
+        onClick={() => {}}
+      >
+        {buttonText}
+      </Button>
+    </div>
+  );
+};
+
+export { RedButton, DisableButton };
