@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import axios from "axios";
 import { authState } from "../state/auth";
+import deliveryLogo from "../assets/deliverLogo.png";
+import deliveryTitle from "../assets/deliverTitle.png";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -52,7 +54,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="h-screen w-fit mx-auto flex items-center">
+    <div className="h-screen w-fit gap-16 mx-auto flex items-center">
       <div className="flex justify-between w-fit gap-16">
         <div className="flex flex-col w-fit gap-8">
           <p className="text-blueLight text-5xl">로그인</p>
@@ -84,6 +86,10 @@ const LoginPage = () => {
             Login
           </Button>
         </div>
+      </div>
+      <div className=" flex flex-col gap-4">
+        <img src={deliveryTitle} alt="deliveryTitle" className="w-96 mx-auto" />
+        <img src={deliveryLogo} alt="deliveryLogo" className="w-96 mx-auto" />
       </div>
     </div>
   );

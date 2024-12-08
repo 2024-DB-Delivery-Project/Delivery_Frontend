@@ -12,7 +12,9 @@ const InfoTable = ({ rows, cols }: InfoTableTS) => {
   const selectorOptios = ["logistic1", "logistic2", "logistic3"];
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <TableContainer>
+      <TableContainer sx={{ maxHeight: 400 }}>
+        {" "}
+        {/* Set the maximum height for the table container */}
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>

@@ -22,8 +22,10 @@ const SellerHome = () => {
   ];
 
   const mockClickFunction = async () => {
+    const filteredRows = rows.filter((row) => row.tracking_number === null);
+
     try {
-      for (const row of rows) {
+      for (const row of filteredRows) {
         await selectLogistic(row.order_id);
       }
       console.log("모든 주문의 물류 정보가 성공적으로 업데이트되었습니다.");

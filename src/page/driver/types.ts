@@ -15,4 +15,8 @@ interface DriverCol {
   minWidth: number;
 }
 
-export { DriverRow, DriverCol };
+interface DriverOrderTS {
+  order_by: "delivery_id" | "detailed_address" | "customer_name";
+}
+
+export { DriverRow, DriverCol, DriverOrderTS };

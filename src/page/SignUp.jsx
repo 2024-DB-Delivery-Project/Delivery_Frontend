@@ -204,9 +204,9 @@ const SignUp = () => {
                   <FormControl fullWidth margin="normal">
                     <InputLabel>도시</InputLabel>
                     <Select value={city} onChange={handleCityChange}>
-                      <MenuItem value="Seoul">서울</MenuItem>
-                      <MenuItem value="Busan">부산</MenuItem>
-                      <MenuItem value="Incheon">인천</MenuItem>
+                      <MenuItem value="서울특별시">서울특별시</MenuItem>
+                      <MenuItem value="부산광역시">부산광역시</MenuItem>
+                      <MenuItem value="인천광역시">인천</MenuItem>
                       {/* 추가적인 도시 옵션을 여기에 추가 */}
                     </Select>
                   </FormControl>
@@ -214,9 +214,9 @@ const SignUp = () => {
                   <FormControl fullWidth margin="normal">
                     <InputLabel>읍/면/동</InputLabel>
                     <Select value={town} onChange={handleTownChange}>
-                      <MenuItem value="Gangnam">강남</MenuItem>
-                      <MenuItem value="Haeundae">해운대</MenuItem>
-                      <MenuItem value="Jung-gu">중구</MenuItem>
+                      <MenuItem value="강남">강남</MenuItem>
+                      <MenuItem value="해운대">해운대</MenuItem>
+                      <MenuItem value="중구">중구</MenuItem>
                       {/* 추가적인 읍/면/동 옵션을 여기에 추가 */}
                     </Select>
                   </FormControl>
@@ -224,9 +224,9 @@ const SignUp = () => {
                   <FormControl fullWidth margin="normal">
                     <InputLabel>리/마을</InputLabel>
                     <Select value={village} onChange={handleVillageChange}>
-                      <MenuItem value="Samseong">삼성</MenuItem>
-                      <MenuItem value="Jangsan">장산</MenuItem>
-                      <MenuItem value="Bujeon">부전</MenuItem>
+                      <MenuItem value="삼성">삼성</MenuItem>
+                      <MenuItem value="장산">장산</MenuItem>
+                      <MenuItem value="부전">부전</MenuItem>
                       {/* 추가적인 리/마을 옵션을 여기에 추가 */}
                     </Select>
                   </FormControl>

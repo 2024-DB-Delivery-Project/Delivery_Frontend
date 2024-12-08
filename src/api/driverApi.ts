@@ -2,11 +2,17 @@ import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-const getDriverDeliveries = async (token: string) => {
+const getDriverDeliveries = async (
+  token: string,
+  sortBy: "delivery_id" | "detailed_address" | "customer_name"
+) => {
   try {
     const response = await axios.get(`${API_URL}/driver/deliveries`, {
       headers: {
         Authorization: `${token}`, // 토큰 인증 (Bearer 방식)
+      },
+      params: {
+        sort_by: sortBy, // Include sort_by as a query parameter
       },
     });
     console.log("Driver deliveries fetched:", response.data);

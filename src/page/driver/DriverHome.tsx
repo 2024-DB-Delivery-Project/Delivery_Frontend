@@ -1,16 +1,18 @@
 import InfoTable from "../../components/Table/Table";
-import { DisableButton, RedButton } from "../../components/Button/Button";
+import { RedButton } from "../../components/Button/Button";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../state/auth";
-import { DriverCol, DriverRow } from "./types";
+import { DriverCol, DriverOrderTS, DriverRow } from "./types";
 import { getDriverDeliveries, markDelivered } from "../../api/driverApi";
 
 const DriverHome = () => {
   const { accessToken } = useRecoilValue(authState);
   const [rows, setRows] = useState<DriverRow[]>([]);
   const [updatePage, setUpdatePage] = useState<boolean>(false);
-  const [deliverCity, setDeliverCity] = useState<string[]>([]);
+  const [order, setOrder] = useState<
+    "delivery_id" | "detailed_address" | "customer_name"
+  >("delivery_id");
 
   const handleMarkDelivered = async (deliveryId: number) => {
     console.log(`배송완료 상태 변경: ${deliveryId}`);
@@ -33,10 +35,13 @@ const DriverHome = () => {
     setUpdatePage((prev) => !prev);
   };
 
-  const fetchData = async () => {
+  const fetchData = async (
+    sortBy: "delivery_id" | "detailed_address" | "customer_name" = "delivery_id"
+  ) => {
     if (accessToken) {
       try {
-        const data = await getDriverDeliveries(accessToken);
+        // Pass sortBy to getDriverDeliveries
+        const data = await getDriverDeliveries(accessToken, sortBy);
         const { deliveries } = data;
 
         const updatedRows: DriverRow[] = deliveries
@@ -58,10 +63,6 @@ const DriverHome = () => {
           }));
 
         setRows(updatedRows);
-        const cities = deliveries.map(
-          (delivery: any) => delivery.detailed_address.split(",")[0]
-        );
-        setDeliverCity(cities);
       } catch (error) {
         console.error("Error in fetchData:", error);
         alert("물품 데이터를 불러오는 데 실패했습니다.");
@@ -69,13 +70,25 @@ const DriverHome = () => {
     }
   };
 
-  const orderbyRegion = () => {
-    console.log("지역별로 정렬하기");
+  const handleSortByDeliveryId = () => {
+    setOrder("delivery_id");
+    fetchData("delivery_id");
+  };
+
+  const handleSortByCustomerName = () => {
+    setOrder("customer_name");
+    fetchData("customer_name");
+  };
+
+  const handleSortByAddress = () => {
+    setOrder("detailed_address");
+    fetchData("detailed_address");
   };
 
   useEffect(() => {
-    fetchData();
-  }, [accessToken, updatePage]);
+    fetchData(order);
+    console.log("Fetching data...", order);
+  }, [accessToken, updatePage, order]);
 
   const cols: DriverCol[] = [
     { id: "name", label: "상품명", minWidth: 100 },
@@ -92,12 +105,25 @@ const DriverHome = () => {
       <div className="flex flex-col gap-2 mb-4">
         <div className="text-2xl font-bold">배송 물품</div>
         <div className="text-sm text-gray-500">
-          배송이 필요한 물품들의 list 입니다. 지역별로 정렬을 하시려면 아래
-          "지역별 정렬" 버튼을 눌러주세요.
+          배송이 필요한 물품들의 리스트입니다. 원하는 옵션 기준으로 정렬 버튼을
+          눌러주세요
         </div>
       </div>
+
       <InfoTable cols={cols} rows={rows} />
-      <RedButton buttonText="지역별 정렬" onClick={orderbyRegion} />
+      <div className="flex gap-8">
+        <RedButton buttonText="지역별 정렬" onClick={handleSortByAddress} />
+
+        <RedButton
+          buttonText="배송 ID로 정렬"
+          onClick={handleSortByDeliveryId}
+        />
+
+        <RedButton
+          buttonText="고객 이름으로 정렬"
+          onClick={handleSortByCustomerName}
+        />
+      </div>
     </div>
   );
 };

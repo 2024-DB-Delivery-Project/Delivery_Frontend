@@ -20,7 +20,7 @@ const CustomerOrder = () => {
 
   const handleAddToBoughtList = async () => {
     try {
-      const orders = await getBoughtList("customer1", "010-1111-1111");
+      const orders = await getBoughtList(name, phone);
       setBoughtList(orders);
       console.log("구매한 물품 목록:", orders);
     } catch (error) {
