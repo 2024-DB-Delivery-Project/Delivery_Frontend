@@ -14,6 +14,9 @@ const LoginPage = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const handleSignup = () => {
+    navigate("/signup");
+  };
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -60,9 +63,9 @@ const LoginPage = () => {
           <p className="text-blueLight text-5xl">로그인</p>
           <p>
             계정을 가지고 있지 않으신가요? <br />
-            <a href="/signup" className="text-blueDark">
+            <div className="text-blueDark" onClick={handleSignup}>
               회원가입
-            </a>
+            </div>
             을 진행해주세요
           </p>
 
