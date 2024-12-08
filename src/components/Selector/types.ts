@@ -5,7 +5,8 @@ interface SelectorTS {
   index: number; // 현재 Selector의 인덱스
   options: string[]; // 옵션 리스트
   //   value: number | ""; // 현재 선택된 값
-  //   onChange: (index: number, value: number) => void; // 부모에게 값 전달
+  handleChange: (driverId: string) => void; // Define the type for onChange
+  // 부모에게 값 전달
 }
 
 interface HandleChange {

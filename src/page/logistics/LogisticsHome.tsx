@@ -3,9 +3,9 @@ import { LogisticsCol, LogisticsRow } from "./types";
 import { RedButton } from "../../components/Button/Button";
 import { useEffect, useState } from "react";
 import MatchingDriver from "../../components/Modal/MatchingDriver";
-import { getLogisticDeliveries } from "../../api/sellerApi";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../state/auth";
+import { getLogisticDeliveries } from "../../api/logisticApi";
 
 const LogisticsHome = () => {
   const { accessToken } = useRecoilValue(authState);
@@ -23,14 +23,20 @@ const LogisticsHome = () => {
 
         const updatedRows: LogisticsRow[] = grouped_deliveries.flatMap(
           (group: any) =>
-            group.deliveries.map((delivery: any) => ({
-              name: delivery.product_name,
-              customerName: delivery.customer_name,
-              customerPhone: delivery.customer_phone,
-              customerAddress: delivery.detailed_address,
-              trackingNumber: delivery.tracking_number || "-",
-              city: group.city,
-            }))
+            group.deliveries
+              .filter(
+                (delivery: any) => delivery.delivery_status === "Processing"
+              ) // 필터링
+              .map((delivery: any) => ({
+                deliveryId: delivery.delivery_id,
+                name: delivery.product_name,
+                customerName: delivery.customer_name,
+                customerPhone: delivery.customer_phone,
+                customerAddress: delivery.detailed_address,
+                trackingNumber: delivery.tracking_number || "-",
+                city: group.city,
+                deliveryStatus: delivery.delivery_status,
+              }))
         );
 
         setRows(updatedRows);
@@ -43,7 +49,7 @@ const LogisticsHome = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [setOpen]);
 
   const handleClickOpen = () => {
     setOpen(true);

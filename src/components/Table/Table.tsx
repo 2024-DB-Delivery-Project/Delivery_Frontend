@@ -7,7 +7,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { InfoTableTS } from "./types";
-import Selector from "../Selector/Selector";
 
 const InfoTable = ({ rows, cols }: InfoTableTS) => {
   const selectorOptios = ["logistic1", "logistic2", "logistic3"];
@@ -42,18 +41,8 @@ const InfoTable = ({ rows, cols }: InfoTableTS) => {
                     align="center"
                     key={`cell-${rowIndex}-${colIndex}`}
                   >
-                    {col.id === "logistic" ? (
-                      <Selector
-                        id={colIndex.toString()}
-                        index={rowIndex}
-                        options={selectorOptios}
-                        // onChange={() => {}} //TODO
-                      />
-                    ) : (
-                      (row as Record<string, any>)[col.id]
-                    )}
+                    {(row as Record<string, any>)[col.id]}
                   </TableCell>
-                  //() => logisticSelector({id : colIndex.toString()})
                 ))}
               </TableRow>
             ))}

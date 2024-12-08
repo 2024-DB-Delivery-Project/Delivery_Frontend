@@ -12,8 +12,8 @@ import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import Selector from "../Selector/Selector";
 import MatchingDriverTS from "./types";
-import { getDriversByCity } from "../../api/sellerApi";
 import { LogisticsRow } from "../../page/logistics/types";
+import { assignDriver, getDriversByCity } from "../../api/logisticApi";
 
 export default function MatchingDriver({
   open,
@@ -24,11 +24,44 @@ export default function MatchingDriver({
   const [driverOptions, setDriverOptions] = useState<{
     [key: string]: string[];
   }>({});
+  const [selectedDrivers, setSelectedDrivers] = useState<{
+    [key: string]: string;
+  }>({});
 
-  const handleSend = () => {
+  const handleSend = async () => {
+    const promises = rows.map(async (deliver: LogisticsRow) => {
+      const region = deliver.city;
+      const driver = selectedDrivers[region];
+      if (driver) {
+        const driverPaser = driver.match(/\(ID: (\d+)\)/); // Match the number inside the parentheses
+        const driverId = driverPaser ? driverPaser[1] : null; // Get the first capturing group (the driver ID)
+        console.log("Assigning driver:", driverId);
+        try {
+          const response = await assignDriver(
+            deliver.deliveryId,
+            Number(driverId)
+          );
+          console.log("Driver assigned successfully:", response);
+        } catch (error) {
+          console.error("Failed to assign driver:", error);
+        }
+      }
+    });
+    await Promise.all(promises);
     alert("배송기사 지정 완료!");
     handleClose();
   };
+
+  const handleDriverChange = (region: string, driverValue: string) => {
+    setSelectedDrivers(() => ({
+      [region]: driverValue,
+    }));
+  };
+
+  useEffect(() => {
+    console.log("Selected drivers:", selectedDrivers);
+    const driverInfo = selectedDrivers["부산광역시"];
+  }, [selectedDrivers]);
 
   useEffect(() => {
     const fetchDrivers = async () => {
@@ -38,7 +71,8 @@ export default function MatchingDriver({
         try {
           const data = await getDriversByCity(region);
           options[region] = data.drivers.map(
-            (driver: { name: string }) => `${region} - ${driver.name}`
+            (driver: { name: string; user_id: number }) =>
+              `${region} - ${driver.name} (ID: ${driver.user_id})`
           );
         } catch (error) {
           console.error(`Failed to fetch drivers for region ${region}`, error);
@@ -89,7 +123,6 @@ export default function MatchingDriver({
             const filteredRows = rows.filter((row: LogisticsRow) =>
               row.city.includes(region)
             );
-
             return (
               <div key={region}>
                 <Typography variant="h6" component="div">
@@ -112,6 +145,9 @@ export default function MatchingDriver({
                       id={index.toString()}
                       index={index}
                       options={driverOptions[region] || []}
+                      handleChange={(driverValue: string) =>
+                        handleDriverChange(region, driverValue)
+                      }
                     />
                   </div>
                 </div>

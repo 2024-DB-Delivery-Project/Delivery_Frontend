@@ -23,4 +23,26 @@ interface DeliveryStatusResponse {
   delivery_statuses: DeliveryStatus[];
 }
 
-export { Order, BoughtListResponse, DeliveryStatus, DeliveryStatusResponse };
+interface SignupData {
+  name: string;
+  phone_number: string;
+  role: string;
+  address_id: number;
+  login_id: string;
+  password: string;
+}
+
+interface AddressInfo {
+  city: string;
+  town: string;
+  village: string;
+}
+
+export {
+  Order,
+  BoughtListResponse,
+  DeliveryStatus,
+  DeliveryStatusResponse,
+  SignupData,
+  AddressInfo,
+};

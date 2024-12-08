@@ -1,10 +1,12 @@
 interface LogisticsRow {
+  deliveryId: number;
   trackingNumber: string;
   name: string;
   customerName: string;
   customerPhone: string;
   customerAddress: string;
   city: string;
+  deliveryStatus: string;
 }
 
 interface LogisticsCol {
