@@ -30,4 +30,17 @@ const selectLogistic = async (orderId: number) => {
   }
 };
 
-export { getSellerOrders, selectLogistic };
+const getDeliveryStatus = async (trackingNumber: number) => {
+  try {
+    const response = await axios.post(`${API_URL}/seller/get_delivery_status`, {
+      tracking_number: trackingNumber,
+    });
+    console.log("Delivery status fetched:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching delivery status", error);
+    throw new Error("Failed to fetch delivery status");
+  }
+};
+
+export { getSellerOrders, selectLogistic, getDeliveryStatus };

@@ -23,15 +23,15 @@ const CustomerDeliveryInfo = ({
   const getStepFromStatus = (status: string) => {
     switch (status) {
       case "Received":
-        return 1;
+        return 0;
       case "Processing":
-        return 2;
+        return 1;
       case "Shipped":
-        return 3;
+        return 2;
       case "Delivered":
-        return 4;
+        return 3;
       default:
-        return 1; // 기본값: 주문 접수 상태
+        return 0; // 기본값: 주문 접수 상태
     }
   };
 
