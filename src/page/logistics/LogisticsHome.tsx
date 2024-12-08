@@ -3,35 +3,47 @@ import { LogisticsCol, LogisticsRow } from "./types";
 import { RedButton } from "../../components/Button/Button";
 import { useEffect, useState } from "react";
 import MatchingDriver from "../../components/Modal/MatchingDriver";
+import { getLogisticDeliveries } from "../../api/sellerApi";
+import { useRecoilValue } from "recoil";
+import { authState } from "../../state/auth";
 
 const LogisticsHome = () => {
-  const defalutRows: LogisticsRow[] = [
-    {
-      name: "상품A",
-      customerName: "customerA",
-      customerPhone: "010-1234-5678",
-      customerAddress: "서울시 강남구",
-      trackingNumber: "-",
-    },
-    {
-      name: "상품A",
-      customerName: "customerB",
-      customerPhone: "010-1234-5678",
-      customerAddress: "부산시 금정구",
-      trackingNumber: "-",
-    },
-    {
-      name: "상품D",
-      customerName: "customerB",
-      customerPhone: "010-1234-5678",
-      customerAddress: "부산시 금정구",
-      trackingNumber: "2134",
-    },
-  ];
-
-  const [rows, setRows] = useState<LogisticsRow[]>(defalutRows);
+  const { accessToken } = useRecoilValue(authState);
+  const [rows, setRows] = useState<LogisticsRow[]>([]);
   const [open, setOpen] = useState(false);
-  const [logisticBtnInfo, setLogisticBtnInfo] = useState(false);
+  const [deliverCity, setDeliverCity] = useState<string[]>([]);
+
+  const fetchData = async () => {
+    if (accessToken) {
+      try {
+        const data = await getLogisticDeliveries(accessToken);
+        const { grouped_deliveries } = data;
+        const cities = grouped_deliveries.map((group: any) => group.city);
+        setDeliverCity(cities);
+
+        const updatedRows: LogisticsRow[] = grouped_deliveries.flatMap(
+          (group: any) =>
+            group.deliveries.map((delivery: any) => ({
+              name: delivery.product_name,
+              customerName: delivery.customer_name,
+              customerPhone: delivery.customer_phone,
+              customerAddress: delivery.detailed_address,
+              trackingNumber: delivery.tracking_number || "-",
+              city: group.city,
+            }))
+        );
+
+        setRows(updatedRows);
+      } catch (error) {
+        console.error("Error in fetchData:", error);
+        alert("물품 데이터를 불러오는 데 실패했습니다.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -39,17 +51,6 @@ const LogisticsHome = () => {
 
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const handleTrackingNumber = () => {
-    setRows((prev) =>
-      prev.map((prevRow) =>
-        prevRow.trackingNumber === "-"
-          ? { ...prevRow, trackingNumber: "1234" }
-          : prevRow
-      )
-    );
-    setLogisticBtnInfo(true);
   };
 
   const cols: LogisticsCol[] = [
@@ -63,22 +64,20 @@ const LogisticsHome = () => {
   return (
     <div className="flex flex-col w-full px-16 py-8 gap-4">
       <div className="flex flex-col gap-2 mb-4">
-        <div className="text-2xl font-bold">물품구매</div>
+        <div className="text-2xl font-bold">배송 가능 물품</div>
         <div className="text-sm text-gray-500">
-          물품은 한번에 하나만 구매 가능합니다. 구매하고자 하는 상품을 선택한 후
-          물품 구매 버튼을 눌러주세요
+          사용자들의 구매 내역을 확인하고 배송을 진행해주세요. 지역별로 배송
+          기사를 지정 가능합니다.
         </div>
       </div>
       <InfoTable cols={cols} rows={rows} />
-      <RedButton
-        buttonText={
-          logisticBtnInfo === false ? "운송장 번호 일괄 지정" : "배송기사 지정"
-        }
-        onClick={
-          logisticBtnInfo === false ? handleTrackingNumber : handleClickOpen
-        }
+      <RedButton buttonText="배송기사 지정" onClick={handleClickOpen} />
+      <MatchingDriver
+        rows={rows}
+        open={open}
+        handleClose={handleClose}
+        deliverCity={deliverCity}
       />
-      <MatchingDriver open={open} handleClose={handleClose} />
     </div>
   );
 };

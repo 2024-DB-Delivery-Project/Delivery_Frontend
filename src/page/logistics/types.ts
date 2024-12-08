@@ -1,9 +1,10 @@
 interface LogisticsRow {
+  trackingNumber: string;
   name: string;
   customerName: string;
   customerPhone: string;
   customerAddress: string;
-  trackingNumber: string;
+  city: string;
 }
 
 interface LogisticsCol {
